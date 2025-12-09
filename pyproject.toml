@@ -1,0 +1,57 @@
+[tool.poetry]
+name = "azure-doc-processing"
+version = "1.1.1"
+description = "Utilities for Azure document processing"
+readme = "README.md"
+authors = [
+    "Bas van der Laan <b.vanderlaan@verdel.nl>",
+    "Kevin van Dijk <k.vandijk@verdel.nl>"
+]
+packages = [
+    {include = "azure_doc_processing"}
+]
+
+license = "Apache-2.0"
+keywords = ["azure", "document", "processing", "nlp", "openai", "blob", "keyvault"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: Apache Software License",
+    "Operating System :: OS Independent",
+]
+homepage = "https://github.com/Verdel-Digitaal-Partner/azure-doc-processing"
+repository = "https://github.com/Verdel-Digitaal-Partner/azure-doc-processing"
+documentation = "https://github.com/Verdel-Digitaal-Partner/azure-doc-processing#readme"
+
+[tool.poetry.dependencies]
+python = ">=3.10,<3.14"
+openai = ">=1.55.3,<2.0.0"
+langchain-openai = "^0.3.24"
+azure-identity = "^1.23.0"
+azure-storage-blob = ">=12.19,<13.0"
+azure-ai-documentintelligence = "^1.0.2"
+azure-keyvault = "^4.2.0"
+pytz = ">=2023.3"
+pypdf = "^5.6.1"
+pandas = ">=2.3,<3.0"
+azure-data-tables = "^12.7.0"
+
+[tool.poetry.group.dev.dependencies]
+black = "^24.10.0"
+autoflake = "^2.3.1"
+isort = "^5.13.2"
+poethepoet = "^0.31.1"
+pytest = "^8.3.4"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poe.tasks]
+format = [
+    { cmd = "autoflake --in-place --expand-star-imports -r azure_doc_processing/ tests/" },
+    { cmd = "black -l 93 azure_doc_processing/ tests/" },
+    { cmd = "isort azure_doc_processing/ tests/" },
+]
+test = [
+    { cmd = "pytest tests/"}
+]
