@@ -41,6 +41,7 @@ autoflake = "^2.3.1"
 isort = "^5.13.2"
 poethepoet = "^0.31.1"
 pytest = "^8.3.4"
+twine = "^6.2.0"
 
 [build-system]
 requires = ["poetry-core"]
@@ -54,4 +55,10 @@ format = [
 ]
 test = [
     { cmd = "pytest tests/"}
+]
+publish-testpypi = [
+    { cmd = "bash scripts/publish_testpypi.sh" }
+]
+publish-pypi = [
+    { cmd = "bash scripts/publish_pypi.sh" }
 ]

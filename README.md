@@ -134,6 +134,44 @@ Before committing changes, run:
 poe format
 poe test
 ```
+------------------------------------------------------------------------
+
+## Publishing the Package
+
+This project includes automated publishing scripts.
+
+### Prerequisites
+
+Make sure you have:
+
+- An API token for **TestPyPI** and/or **PyPI**
+- A valid `~/.pypirc` file, for example:
+
+  ```ini
+  [testpypi]
+  username = __token__
+  password = pypi-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+  [pypi]
+  username = __token__
+  password = pypi-yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy
+  ```
+
+### Publish to TestPyPI (dry run)
+Use this when testing new releases.
+This publishes the package under a temporary test name and performs an install + import smoke test.
+
+`poe publish-testpypi`
+
+### Publish to PyPi (real release)
+Use this when releasing an official version.
+Make sure you’ve bumped the version in `pyproject.toml`.
+
+`poe publish-pypi`
+
+Publishing will fail if the version already exists on PyPI.
+Real releases should use unique, semantic version increments.
+
 
 ------------------------------------------------------------------------
 
