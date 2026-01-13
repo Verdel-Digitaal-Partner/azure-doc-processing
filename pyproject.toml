@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "azure-doc-processing"
-version = "1.1.1"
+version = "1.1.2"
 description = "Utilities for Azure document processing"
 readme = "README.md"
 authors = [
@@ -57,8 +57,8 @@ test = [
     { cmd = "pytest tests/"}
 ]
 publish-testpypi = [
-    { cmd = "bash scripts/publish_testpypi.sh" }
+    { cmd = "bash scripts/publish-testpypi.sh" }
 ]
 publish-pypi = [
-    { cmd = "bash scripts/publish_pypi.sh" }
+    { cmd = "bash scripts/publish-pypi.sh" }
 ]
