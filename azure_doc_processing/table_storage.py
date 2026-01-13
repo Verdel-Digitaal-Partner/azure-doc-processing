@@ -1,4 +1,4 @@
-from azure.core.credentials import AzureNamedKeyCredential
+from azure.core.credentials import AzureNamedKeyCredential, AzureSasCredential
 from azure.core.exceptions import AzureError, ResourceExistsError
 from azure.data.tables import TableServiceClient
 from azure.identity import DefaultAzureCredential
@@ -13,16 +13,20 @@ class AzureTableStorage:
     Azure Table Storage client to store and manage entities in Azure Storage Tables
     """
 
-    def __init__(self, account_name: str, account_key: str = None) -> None:
+    def __init__(
+        self, account_name: str, account_key: str = None, sas_token: str = None
+    ) -> None:
         """
         Initialize the Azure Table Storage client
 
         Args:
             account_name: name of the Azure Storage account
             account_key: access key for the storage account (optional, uses DefaultAzureCredential if not provided)
+            sas_token: SAS token for the storage account (optional)
         """
         self.account_name = account_name
         self.account_key = account_key
+        self.sas_token = sas_token
         self.get_table_service_client()
 
     def get_table_service_client(self):
@@ -32,6 +36,12 @@ class AzureTableStorage:
         try:
             if self.account_key:
                 credential = AzureNamedKeyCredential(self.account_name, self.account_key)
+                self.client = TableServiceClient(
+                    endpoint=f"https://{self.account_name}.table.core.windows.net",
+                    credential=credential,
+                )
+            elif self.sas_token:
+                credential = AzureSasCredential(self.sas_token)
                 self.client = TableServiceClient(
                     endpoint=f"https://{self.account_name}.table.core.windows.net",
                     credential=credential,
