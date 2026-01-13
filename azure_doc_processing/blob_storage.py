@@ -5,6 +5,7 @@ from datetime import datetime
 
 import pandas as pd
 import pytz
+from azure.core.credentials import AzureNamedKeyCredential, AzureSasCredential
 from azure.core.exceptions import AzureError, ResourceExistsError
 from azure.identity import DefaultAzureCredential
 from azure.storage.blob import BlobServiceClient, ContentSettings
@@ -19,17 +20,35 @@ class AzureDataLake:
     Azure blob storage client to read and write files from and to blob
     """
 
-    def __init__(self, account_name, account_key) -> None:
+    def __init__(
+        self, account_name: str, account_key: str = None, sas_token: str = None
+    ) -> None:
+        """
+        Initialize the Azure Blob Storage client
+
+        Args:
+            account_name: name of the Azure Storage account
+            account_key: access key for the storage account (optional, uses DefaultAzureCredential if not provided)
+            sas_token: SAS token for the storage account (optional)
+        """
         self.account_name = account_name
         self.account_key = account_key
+        self.sas_token = sas_token
         self.get_blob_service_client()
 
     def get_blob_service_client(self):
         try:
             if self.account_key:
+                credential = AzureNamedKeyCredential(self.account_name, self.account_key)
                 self.client = BlobServiceClient(
                     account_url=f"https://{self.account_name}.blob.core.windows.net",
-                    credential=self.account_key,
+                    credential=credential,
+                )
+            elif self.sas_token:
+                credential = AzureSasCredential(self.sas_token)
+                self.client = BlobServiceClient(
+                    account_url=f"https://{self.account_name}.blob.core.windows.net",
+                    credential=credential,
                 )
             else:
                 self.client = BlobServiceClient(
