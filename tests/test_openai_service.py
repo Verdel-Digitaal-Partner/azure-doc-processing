@@ -1,5 +1,5 @@
 import unittest
-from unittest.mock import MagicMock, patch
+from unittest.mock import patch
 
 from langchain_openai import AzureChatOpenAI
 
@@ -31,7 +31,9 @@ class TestOpenAIDeploymentInit(unittest.TestCase):
     @patch("azure_doc_processing.openai_service.AzureChatOpenAI")
     @patch("azure_doc_processing.openai_service.get_bearer_token_provider")
     @patch("azure_doc_processing.openai_service.DefaultAzureCredential")
-    def test_init_with_default_credential(self, mock_credential, mock_token_provider, mock_chat_cls):
+    def test_init_with_default_credential(
+        self, mock_credential, mock_token_provider, mock_chat_cls
+    ):
         """Should use DefaultAzureCredential when no api_key is provided."""
         mock_token_provider.return_value = "token_provider_func"
 
@@ -121,7 +123,9 @@ class TestOpenAIDeploymentLangchainCompatibility(unittest.TestCase):
 
     @patch("azure_doc_processing.openai_service.get_bearer_token_provider")
     @patch("azure_doc_processing.openai_service.DefaultAzureCredential")
-    def test_default_credential_path_creates_real_client(self, mock_credential, mock_token_provider):
+    def test_default_credential_path_creates_real_client(
+        self, mock_credential, mock_token_provider
+    ):
         """AzureChatOpenAI should still accept the kwargs used in the token-provider code path."""
         mock_token_provider.return_value = lambda: "fake-token"
 

@@ -1,7 +1,6 @@
 import unittest
 from unittest.mock import MagicMock, patch
 
-
 from azure_doc_processing.keyvault import get_secret_from_key_vault
 
 
@@ -16,9 +15,7 @@ class TestGetSecretFromKeyVault(unittest.TestCase):
         mock_secret.value = "my-secret-value"
         mock_client_cls.return_value.get_secret.return_value = mock_secret
 
-        result = get_secret_from_key_vault(
-            "https://my-vault.vault.azure.net", "my-secret"
-        )
+        result = get_secret_from_key_vault("https://my-vault.vault.azure.net", "my-secret")
 
         self.assertEqual(result, "my-secret-value")
         mock_credential.assert_called_once()
@@ -39,13 +36,13 @@ class TestGetSecretFromKeyVault(unittest.TestCase):
 
     @patch("azure_doc_processing.keyvault.SecretClient")
     @patch("azure_doc_processing.keyvault.DefaultAzureCredential")
-    def test_get_secret_credential_error_returns_none(self, mock_credential, mock_client_cls):
+    def test_get_secret_credential_error_returns_none(
+        self, mock_credential, mock_client_cls
+    ):
         """Should return None when credential creation fails."""
         mock_credential.side_effect = Exception("auth failed")
 
-        result = get_secret_from_key_vault(
-            "https://my-vault.vault.azure.net", "my-secret"
-        )
+        result = get_secret_from_key_vault("https://my-vault.vault.azure.net", "my-secret")
 
         self.assertIsNone(result)
 

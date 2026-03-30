@@ -1,5 +1,4 @@
 import io
-import os
 import unittest
 from unittest.mock import MagicMock, mock_open, patch
 
@@ -16,7 +15,9 @@ class TestDocumentIntelligenceInit(unittest.TestCase):
     @patch("azure_doc_processing.document_intelligence.AzureKeyCredential")
     def test_init_with_key(self, mock_credential, mock_client_cls):
         """Should create client with AzureKeyCredential when key is provided."""
-        di = DocumentIntelligence(endpoint="https://endpoint.cognitiveservices.azure.com", key="mykey")
+        di = DocumentIntelligence(
+            endpoint="https://endpoint.cognitiveservices.azure.com", key="mykey"
+        )
 
         mock_credential.assert_called_once_with("mykey")
         mock_client_cls.assert_called_once()
@@ -39,7 +40,9 @@ class TestDocumentIntelligenceAnalyzeDoc(unittest.TestCase):
     def _make_di(self):
         with patch("azure_doc_processing.document_intelligence.DocumentIntelligenceClient"):
             with patch("azure_doc_processing.document_intelligence.DefaultAzureCredential"):
-                di = DocumentIntelligence(endpoint="https://endpoint.cognitiveservices.azure.com")
+                di = DocumentIntelligence(
+                    endpoint="https://endpoint.cognitiveservices.azure.com"
+                )
         di.client = MagicMock()
         return di
 
@@ -103,7 +106,10 @@ class TestDocumentIntelligenceAnalyzeDoc(unittest.TestCase):
         )
 
         call_kwargs = di.client.begin_analyze_document.call_args
-        self.assertEqual(call_kwargs.kwargs.get("features") or call_kwargs[1].get("features"), ["ocrHighResolution"])
+        self.assertEqual(
+            call_kwargs.kwargs.get("features") or call_kwargs[1].get("features"),
+            ["ocrHighResolution"],
+        )
 
 
 class TestDocumentIntelligenceProcessKeyValuePairs(unittest.TestCase):
@@ -112,7 +118,9 @@ class TestDocumentIntelligenceProcessKeyValuePairs(unittest.TestCase):
     def _make_di(self):
         with patch("azure_doc_processing.document_intelligence.DocumentIntelligenceClient"):
             with patch("azure_doc_processing.document_intelligence.DefaultAzureCredential"):
-                di = DocumentIntelligence(endpoint="https://endpoint.cognitiveservices.azure.com")
+                di = DocumentIntelligence(
+                    endpoint="https://endpoint.cognitiveservices.azure.com"
+                )
         return di
 
     def test_process_key_value_pairs(self):
@@ -147,7 +155,9 @@ class TestDocumentIntelligenceProcessTables(unittest.TestCase):
     def _make_di(self):
         with patch("azure_doc_processing.document_intelligence.DocumentIntelligenceClient"):
             with patch("azure_doc_processing.document_intelligence.DefaultAzureCredential"):
-                di = DocumentIntelligence(endpoint="https://endpoint.cognitiveservices.azure.com")
+                di = DocumentIntelligence(
+                    endpoint="https://endpoint.cognitiveservices.azure.com"
+                )
         return di
 
     def test_process_tables(self):

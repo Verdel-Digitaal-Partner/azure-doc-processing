@@ -1,5 +1,4 @@
 import io
-import json
 import unittest
 from datetime import datetime
 from unittest.mock import MagicMock, mock_open, patch
@@ -79,7 +78,9 @@ class TestAzureDataLakeReadWrite(unittest.TestCase):
 
         self.assertIsInstance(result, io.BytesIO)
         self.assertEqual(result.read(), b"hello world")
-        dl.client.get_blob_client.assert_called_once_with(container="container", blob="blob.txt")
+        dl.client.get_blob_client.assert_called_once_with(
+            container="container", blob="blob.txt"
+        )
 
     @patch("builtins.open", mock_open(read_data=b"file content"))
     def test_write_to_blob_with_filename(self):
@@ -110,10 +111,14 @@ class TestAzureDataLakeReadWrite(unittest.TestCase):
         dl.client.get_blob_client.return_value = mock_blob_client
         data = io.BytesIO(b"data")
 
-        dl.write_to_blob("container", "blob.json", data_stream=data, content_type="application/json")
+        dl.write_to_blob(
+            "container", "blob.json", data_stream=data, content_type="application/json"
+        )
 
         call_kwargs = mock_blob_client.upload_blob.call_args
-        content_settings = call_kwargs.kwargs.get("content_settings") or call_kwargs[1].get("content_settings")
+        content_settings = call_kwargs.kwargs.get("content_settings") or call_kwargs[1].get(
+            "content_settings"
+        )
         self.assertEqual(content_settings.content_type, "application/json")
 
     def test_write_to_blob_no_file_or_stream(self):
@@ -166,7 +171,11 @@ class TestAzureDataLakeListBlobs(unittest.TestCase):
     def test_list_blob_files_with_suffix(self):
         """Should filter blobs by suffix."""
         dl = self._make_datalake()
-        blobs = [self._make_blob("a.txt"), self._make_blob("b.pdf"), self._make_blob("c.txt")]
+        blobs = [
+            self._make_blob("a.txt"),
+            self._make_blob("b.pdf"),
+            self._make_blob("c.txt"),
+        ]
         dl.client.get_container_client.return_value.list_blobs.return_value = blobs
 
         result = dl.list_blob_files("container", suffix=".txt")
@@ -176,7 +185,11 @@ class TestAzureDataLakeListBlobs(unittest.TestCase):
     def test_list_blob_files_with_rem_suffix(self):
         """Should exclude blobs matching rem_suffix."""
         dl = self._make_datalake()
-        blobs = [self._make_blob("a.txt"), self._make_blob("b.txt.bak"), self._make_blob("c.txt")]
+        blobs = [
+            self._make_blob("a.txt"),
+            self._make_blob("b.txt.bak"),
+            self._make_blob("c.txt"),
+        ]
         dl.client.get_container_client.return_value.list_blobs.return_value = blobs
 
         result = dl.list_blob_files("container", rem_suffix=".bak")
@@ -239,7 +252,11 @@ class TestAzureDataLakeRenameBlob(unittest.TestCase):
         mock_new_blob_client.upload_blob.return_value = {"content_md5": md5_value}
 
         # get_blob_client is called 3 times: old blob, new blob, then old blob again inside read_from_blob
-        dl.client.get_blob_client.side_effect = [mock_blob_client, mock_new_blob_client, mock_blob_client]
+        dl.client.get_blob_client.side_effect = [
+            mock_blob_client,
+            mock_new_blob_client,
+            mock_blob_client,
+        ]
 
         dl.rename_blob("container", "old.txt", "new.txt")
 
@@ -261,7 +278,11 @@ class TestAzureDataLakeRenameBlob(unittest.TestCase):
         mock_new_blob_client.upload_blob.side_effect = ResourceExistsError("exists")
 
         # get_blob_client is called 3 times: old blob, new blob, then old blob again inside read_from_blob
-        dl.client.get_blob_client.side_effect = [mock_blob_client, mock_new_blob_client, mock_blob_client]
+        dl.client.get_blob_client.side_effect = [
+            mock_blob_client,
+            mock_new_blob_client,
+            mock_blob_client,
+        ]
 
         # Should not raise
         dl.rename_blob("container", "old.txt", "new.txt")
