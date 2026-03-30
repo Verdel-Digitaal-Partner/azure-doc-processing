@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "azure-doc-processing"
-version = "1.1.2"
+version = "1.2.1"
 description = "Utilities for Azure document processing"
 readme = "README.md"
 authors = [
@@ -24,16 +24,17 @@ documentation = "https://github.com/Verdel-Digitaal-Partner/azure-doc-processing
 
 [tool.poetry.dependencies]
 python = ">=3.10,<3.14"
-openai = ">=1.55.3,<2.0.0"
-langchain-openai = "^0.3.24"
-azure-identity = "^1.23.0"
-azure-storage-blob = ">=12.19,<13.0"
+openai = "^2.0.0"
+azure-core = "^1.37.0"
+azure-identity = "^1.25.3"
+azure-storage-blob = ">=12.28,<13.0"
 azure-ai-documentintelligence = "^1.0.2"
 azure-keyvault = "^4.2.0"
 pytz = ">=2023.3"
 pypdf = "^5.6.1"
 pandas = ">=2.3,<3.0"
 azure-data-tables = "^12.7.0"
+langchain-openai = "^1.1.12"
 
 [tool.poetry.group.dev.dependencies]
 black = "^24.10.0"
