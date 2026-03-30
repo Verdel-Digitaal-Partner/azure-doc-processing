@@ -158,7 +158,7 @@ def fix_pdf_files(
 
     for file in pdf_files:
         try:
-            pdf_blob = datalake.read_from_blob(container="emails", blob=file)
+            pdf_blob = datalake.read_from_blob(container=container, blob=file)
 
             temp_input_path = os.path.join(tmp_dir, os.path.basename(file))
             temp_output_path = os.path.join(tmp_dir, f"fixed_{os.path.basename(file)}")
